@@ -1,0 +1,22 @@
+<VirtualHost *:80>
+  ServerName <domain>
+  ServerAlias www.<domain>
+
+  DocumentRoot /
+
+  <Directory />
+    AllowOverride All
+    Options +FollowSymLinks
+    SetOutputFilter DEFLATE
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    Header append Vary User-Agent env=!dont-vary
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+  </Directory>
+
+  CustomLog /var/log/httpd/<domain>-access_log combined
+  ErrorLog /var/log/httpd/<domain>-error_log
+</VirtualHost>
